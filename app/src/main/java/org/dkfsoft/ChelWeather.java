@@ -14,6 +14,14 @@ public class ChelWeather extends AppWidgetProvider {
 
 	private static final String CLICK_ACTION = "CWClick";
 
+	private void resetAlarmManager(Context context) {
+		AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+		PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		//Update every 10 minutes
+		am.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 1000, 1000*10*60, pi);
+	}
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
@@ -21,21 +29,17 @@ public class ChelWeather extends AppWidgetProvider {
 		String action = intent.getAction();
 
 		if (CLICK_ACTION.equals(action)) {
-			Log.d("MyWidget", "Click");
 			// temporary do nothing
 			// reserved for future usage
-			//Toast.makeText(context, "Clicked", Toast.LENGTH_LONG).show();
+			resetAlarmManager(context);
+			Toast.makeText(context, R.string.data_request_started, Toast.LENGTH_LONG).show();
 		}
 	}
 
 	@Override
 	public void onEnabled(Context context) {
 		super.onEnabled(context);
-		AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
-		PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		//Update every 10 minutes
-		am.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 1000, 1000*10*60, pi);
+		resetAlarmManager(context);
     }
 
 	@Override
@@ -51,6 +55,7 @@ public class ChelWeather extends AppWidgetProvider {
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 			int[] appWidgetIds) {
 
+        resetAlarmManager(context);
 		for (int widgetId : appWidgetIds) {
 			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
 					R.layout.widget_layout);

@@ -14,6 +14,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 /**
  * Created by ap197_000 on 23.12.2015.
@@ -48,7 +49,7 @@ public class KikimorWeather extends AsyncTask<Void, Void, String[]> {
                         .appendQueryParameter("act", "last")
                         .appendQueryParameter("method", "plain")
                         .build();
-                Log.d("MyWidget", uri.toString());
+                //Log.d("MyWidget", uri.toString());
                 HttpResponse response = httpclient.execute(new HttpGet(uri.toString()));
                 StatusLine statusLine = response.getStatusLine();
                 if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
@@ -61,9 +62,15 @@ public class KikimorWeather extends AsyncTask<Void, Void, String[]> {
                     throw new IOException(statusLine.getReasonPhrase());
                 }
             }
-        } catch (ClientProtocolException e) {
+        }
+        catch(UnknownHostException e) {
+            e.printStackTrace();
+            Log.e("KikimorWeather", "Unable to resolve host name: " + e.toString());
+        }
+        catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            Log.e("KikimorWeather", e.toString());
             e.printStackTrace();
         }
 
@@ -72,7 +79,7 @@ public class KikimorWeather extends AsyncTask<Void, Void, String[]> {
 
     @Override
     protected void onPostExecute(String[] res) {
-        Log.d("MyWidget", "Response string elems: " + res.length);
+        //Log.d("MyWidget", "Response string elems: " + res.length);
         if (res.length == sids.length) {
             if (res[0].substring(0,1) != "-") res[0] = "+" + res[0];
             alarm_manager.refreshValues(res);
