@@ -1,0 +1,10 @@
+<resources>
+
+    <string name="app_name">Chelyabinsk weather</string>
+    <string name="widget_text">--</string>
+    <string name="temp_sign">o</string>
+    <string name="temp_char">C</string>
+    <string name="pressure">---</string>
+    <string name="pressure_type">мм.рст.</string>
+
+</resources>
