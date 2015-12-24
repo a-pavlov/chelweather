@@ -55,7 +55,7 @@ public class KikimorWeather extends AsyncTask<Void, Void, String[]> {
                 if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     response.getEntity().writeTo(out);
-                    res[i] = out.toString();
+                    res[i] = out.toString().trim();
                     out.close();
                 } else {
                     response.getEntity().getContent().close();
@@ -81,7 +81,7 @@ public class KikimorWeather extends AsyncTask<Void, Void, String[]> {
     protected void onPostExecute(String[] res) {
         //Log.d("MyWidget", "Response string elems: " + res.length);
         if (res.length == sids.length) {
-            if (res[0].substring(0,1) != "-") res[0] = "+" + res[0];
+            if (!res[0].substring(0,1).equals("-")) res[0] = "+" + res[0];
         }
 
         alarm_manager.refreshValues(res);
