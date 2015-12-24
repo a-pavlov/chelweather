@@ -82,7 +82,8 @@ public class KikimorWeather extends AsyncTask<Void, Void, String[]> {
         //Log.d("MyWidget", "Response string elems: " + res.length);
         if (res.length == sids.length) {
             if (res[0].substring(0,1) != "-") res[0] = "+" + res[0];
-            alarm_manager.refreshValues(res);
         }
+
+        alarm_manager.refreshValues(res);
     }
 };

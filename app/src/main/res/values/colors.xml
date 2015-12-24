@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorText">#000</color>
-    <color name="colorBgr">#FFEA00</color>
+    <color name="colorBgr">#FFF59D</color>
     <color name="colorFrame">#000</color>
+    <color name="colorPositive">#D50000</color>
+    <color name="colorNegative">#0277BD</color>
 </resources>

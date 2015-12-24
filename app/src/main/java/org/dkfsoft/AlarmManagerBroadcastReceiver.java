@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -22,10 +23,12 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     RemoteViews rem_views;
     ComponentName comp_name;
     AppWidgetManager app_manager;
+    Context context;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         // actually no need to update these every time
+        this.context = context;
         rem_views = new RemoteViews(context.getPackageName(),
                 R.layout.widget_layout);
         comp_name = new ComponentName(context, ChelWeather.class);
@@ -43,9 +46,23 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     }
 
     void refreshValues(String[] res) {
-        Log.d("MyWidget", "Update views to " + res[0] + ":" + res[1]);
-        rem_views.setTextViewText(R.id.tv, res[0]);
-        rem_views.setTextViewText(R.id.pressure, res[1]);
-        app_manager.updateAppWidget(comp_name, rem_views);
+        int c = context.getResources().getColor(R.color.colorText);
+        if (res.length == 2) {
+            Log.d("MyWidget", "Update views to " + res[0] + ":" + res[1]);
+            c = (res[0].substring(0, 1).equals("+")) ? context.getResources().getColor(R.color.colorPositive) : context.getResources().getColor(R.color.colorNegative);
+            rem_views.setTextColor(R.id.tv, c);
+            rem_views.setTextColor(R.id.C, c);
+            rem_views.setTextColor(R.id.rs, c);
+            rem_views.setTextViewText(R.id.tv, res[0]);
+            rem_views.setTextViewText(R.id.pressure, res[1]);
+            //TextView tv = rem_views.getLayoutId();
+            app_manager.updateAppWidget(comp_name, rem_views);
+        } else {
+            rem_views.setTextColor(R.id.tv, c);
+            rem_views.setTextColor(R.id.C, c);
+            rem_views.setTextColor(R.id.rs, c);
+            rem_views.setTextViewText(R.id.tv, context.getResources().getString(R.string.widget_text));
+            rem_views.setTextViewText(R.id.pressure, context.getResources().getString(R.string.pressure));
+        }
     }
 }
