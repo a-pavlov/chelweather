@@ -47,16 +47,17 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 
     void refreshValues(String[] res) {
         int c = context.getResources().getColor(R.color.colorText);
-        if (res.length == 2) {
+        if (res[0] != null && res[1] != null && res[0].length() > 0) {
             Log.d("MyWidget", "Update views to " + res[0] + ":" + res[1]);
+            if (res[0] != null && res[1] != null && res[1].length() > 0) {
+                if (!res[0].substring(0,1).equals("-")) res[0] = "+" + res[0];
+            }
             c = (res[0].substring(0, 1).equals("+")) ? context.getResources().getColor(R.color.colorPositive) : context.getResources().getColor(R.color.colorNegative);
             rem_views.setTextColor(R.id.tv, c);
             rem_views.setTextColor(R.id.C, c);
             rem_views.setTextColor(R.id.rs, c);
             rem_views.setTextViewText(R.id.tv, res[0]);
             rem_views.setTextViewText(R.id.pressure, res[1]);
-            //TextView tv = rem_views.getLayoutId();
-            app_manager.updateAppWidget(comp_name, rem_views);
         } else {
             rem_views.setTextColor(R.id.tv, c);
             rem_views.setTextColor(R.id.C, c);
@@ -64,5 +65,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
             rem_views.setTextViewText(R.id.tv, context.getResources().getString(R.string.widget_text));
             rem_views.setTextViewText(R.id.pressure, context.getResources().getString(R.string.pressure));
         }
+
+        app_manager.updateAppWidget(comp_name, rem_views);
     }
 }
