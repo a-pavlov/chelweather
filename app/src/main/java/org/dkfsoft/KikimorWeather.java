@@ -55,7 +55,9 @@ public class KikimorWeather extends AsyncTask<Void, Void, String[]> {
                 if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     response.getEntity().writeTo(out);
-                    res[i] = out.toString().trim();
+                    String s = out.toString().trim();
+                    int startIndex = s.lastIndexOf("\n") + 1;
+                    res[i] = s.substring(startIndex);
                     out.close();
                 } else {
                     response.getEntity().getContent().close();
